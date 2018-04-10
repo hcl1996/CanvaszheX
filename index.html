@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+ <canvas id="cvs" width="600" height="400" style="margin:0 auto;background:#eee"></canvas>
+	<script src="data.js"></script>
+	<script>
+  
+
+      draw(data);
+      function draw(data){
+       var cvs=document.getElementById('cvs'),
+         ctx=cvs.getContext('2d'),
+         //size画布
+         size={
+         	w:cvs.width,
+         	h:cvs.height
+         },
+         padding={//留白
+	        t:40/400*size.h,
+	        r:40/600*size.w,
+	        b:40/400*size.h,
+	        l:40/600*size.w
+       },
+       //轴线
+       axel={
+         w:size.w-padding.r-padding.l,
+         h:size.h-padding.t-padding.b
+       }
+
+       //主轴线
+      ctx.strokeRect(padding.l, padding.t, axel.w, axel.h);
+      ctx.stroke()
+      // Y轴
+      var len=data.y.length,
+          dis=axel.h/len;
+          console.log(len)
+          for(var i=1;i<=len;i++){
+          ctx.beginPath();
+          //ctx.strokeStyle='red';
+
+         ctx.moveTo(padding.l,padding.t+axel.h-dis*i);
+          ctx.lineTo(padding.l+axel.w,padding.t+axel.h-dis*i);
+          ctx.stroke();
+          //写文字
+           ctx.font="14px 宋体";
+            ctx.fillStyle="red"
+          ctx.fillText(data.y[i-1],padding.l-30,padding.t+axel.h-dis*i+5);
+             
+
+          }
+
+        //X轴
+          var XLen=data.x.length,
+          Xdis=axel.w/XLen;  
+          for(let j=1;j<=XLen;j++){
+          	ctx.beginPath()
+          	ctx.fillText(data.x[j-1],padding.l-24+Xdis*j,padding.t+axel.h+12);
+          ctx.moveTo(padding.l+Xdis*j,padding.t);
+          ctx.lineTo(padding.l+Xdis*j,padding.t+axel.h);
+          ctx.stroke()
+          }
+        var data1=data.data[0].da,
+            data2=data.data[1].da,
+            color1=data.data[0].hue,
+            color2=data.data[1].hue;
+          var arr1=[],arr2=[]
+            for(let i=0;i<len;i++){
+              arr1.push(data1[i]);
+              arr2.push(data2[i]);
+            }
+             line(arr1,color1);
+              line(arr2,color2)
+            function line(arr,color){
+               ctx.beginPath();
+               ctx.strokeStyle=color;
+               for(let y=0;y<len;y++){
+               	 ctx.arc(40+Xdis*y,padding.b+axel.h-arr[y],5,0,2*Math.PI)
+               }
+               ctx.stroke();
+               ctx.closePath()
+
+            }
+      }
+	</script>
+</body>
+</html>
